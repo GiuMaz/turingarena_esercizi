@@ -1,15 +1,19 @@
 interface max_seq {
-    var int N;
-    var int[] A;
 
     function solve(int[] v, int n) -> int;
 
     main {
+
+        var int N;
+        var int[] A;
+
         input N;
+
         alloc A : 1..N;
         for(i : 1..N) {
             input A[i];
         }
+
         var int s;
         call solve(A, N) -> s;
         output s;
