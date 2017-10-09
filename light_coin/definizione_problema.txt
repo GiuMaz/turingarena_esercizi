@@ -1,0 +1,31 @@
+il problema consiste nel trovare la moneta false (più leggera delle altre) in un gruppo di monete originali.
+Lo studente deve implementare la funzione
+
+int find_light_coin()
+
+che deve occuparsi di questo compito di ricerca.
+La variabile globale N contiene il numero totale di monete (numerate da 0 a N-1). Lo studente ha a disposizione due funzioni per svolgere le operazioni di misura:
+void place(int coin, int position)
+che permette di posizionare la moneta 'coin' nella posizione 'position'.
+Le convenzioni per le posizioni sono
+LEFT  = -1
+RIGHT =  1
+NONE  =  0
+Riposizionare la stessa moneta più volte genererà un errore.
+
+infine si può usare la funzione
+int weigh()
+che ritorna la posizione della bilancia. Dopo questa pesata tutte le monete vengono tolte dalla bilancia.
+anche qui vale la convenzione
+LEFT  = -1
+RIGHT =  1
+NONE  =  0
+quando lo studente è convinto di aver trovato la moneta leggera deve ritornare la posizone dalla funzione.
+
+esempio:
+se si vuole pesare la differenza tra le monete 1 e 2, si può usare
+place(1,1)
+place(2,-1)
+int risultato = weigh()
+il risultato sarà -1 se la bilancia pende a sinistra (2 è più leggero), 1 se pende a destra (quindi 1 è più leggero) e 0 se la bilancia rimane ferma, quindi entrambe le monete pesano uguali.
+
