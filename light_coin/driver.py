@@ -8,7 +8,7 @@ from turingarena.runtime.data import rebased
 
 
 with sandbox.create_process("solution") as s, light_coin(s) as driver:
-    
+
     driver.N = 10
     monete = [0] * driver.N
     posizione_moneta_leggera = 3;
@@ -35,12 +35,11 @@ with sandbox.create_process("solution") as s, light_coin(s) as driver:
 
         monete[:] = [0] * driver.N
         return return_value
-    
-    S = driver.find_light_coin(callback_place=place, callbaclk_weigh=weigh)
+
+    S = driver.find_light_coin(callback_place=place, callback_weigh=weigh)
 
     if S == posizione_moneta_leggera:
         print ("right coin")
     else:
         print ("wrong coin")
     print("Answer:", S, file=sys.stderr)
-
