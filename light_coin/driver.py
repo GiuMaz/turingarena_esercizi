@@ -6,19 +6,41 @@ from turingarena.runtime.sandbox import sandbox
 from turingarena.runtime.data import rebased
 
 
+
 with sandbox.create_process("solution") as s, light_coin(s) as driver:
     
-    totale_monete = 10
-    driver. posizione_moneta_leggera = 3;
+    driver.N = 10
+    monete = [0] * driver.N
+    posizione_moneta_leggera = 3;
 
-    driver.individua(totale_monete)
+    def place(coin, position):
+        if monete[coin] != 0:
+            raise ValueError("already placed")
+        if coin < 0 or coin >= driver.N:
+            raise ValueError("coin out of range")
+        if position not in(-1,+1):
+            raise ValueError("invalid position")
+        monete[coin] = position
 
-    S=0
-    if S == -1:
-        print ("moneta sbagliata")
+    def weigh():
+        return_value = 0
+
+        total = sum(monete)
+        if total > 0:
+            return_value = 1
+        elif total < 0:
+            return_value = -1
+        else:
+            return_value = - monete[posizione_moneta_leggera]
+
+        monete[:] = [0] * driver.N
+        return return_value
+    
+    S = driver.find_light_coin(callback_place=place, callbaclk_weigh=weigh)
+
+    if S == posizione_moneta_leggera:
+        print ("right coin")
     else:
-        print ("moneta corretta: ",S)
+        print ("wrong coin")
+    print("Answer:", S, file=sys.stderr)
 
-
-
-print("Answer:", S, file=sys.stderr)

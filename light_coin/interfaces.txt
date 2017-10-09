@@ -1,108 +1,31 @@
 interface light_coin {
 
-    var int NONE;
-    var int LEFT;
-    var int RIGHT;
+    var int N;
 
-    var int posizione_moneta_leggera;
-    var int[] posizione_monete;
-    var int numero_pesate;
-    var int moneta_denunciata;
+    function find_light_coin() -> int;
 
-    var int contatore_piatto_sinistro;
-    var int contatore_piatto_destro;
-
-    //var enum { NONE, LEFT, RIGHT } pesata;
-
-    function individua(int N) -> int;
-
-    callback piatto_con_peso_maggiore() -> int
+    callback place(int coin, int position)
     {
-
-        numero_pesate <- numero_pesate + 1;
-
-        if ( contatore_piatto_sinistro < contatore_piatto_destro )
-        {
-            return  RIGHT;
-        }
-
-        if ( contatore_piatto_destro < contatore_piatto_sinistro )
-        {
-            return LEFT;
-        }
-
-        if ( posizione_monete[posizione_moneta_leggera] =  LEFT )
-        {
-            return RIGHT;
-        }
-
-        if ( posizione_monete[posizione_moneta_leggera] =  RIGHT )
-        {
-            return LEFT;
-        }
-
-        return NONE;
+        output coin, position;
     }
 
-    callback collocaMoneta(int moneta, int piatto)
+    callback weigh() -> int
     {
-        if ( posizione_monete[moneta] = LEFT )
-        {
-            contatore_piatto_sinistro <- contatore_piatto_sinistro - 1;
-        }
-        if ( posizione_monete[moneta]  = RIGHT )
-        {
-            contatore_piatto_destro <- contatore_piatto_destro - 1;
-        }
-
-        posizione_monete[moneta] <- piatto;
-
-        if ( posizione_monete[moneta]   = LEFT )
-        {
-            contatore_piatto_sinistro <- contatore_piatto_sinistro + 1;
-        }
-        if ( posizione_monete[moneta] = RIGHT )
-        {
-            contatore_piatto_destro <- contatore_piatto_destro + 1;
-        }
-    }
-
-    callback denuncia(int monetaFalsa)
-    {
-        moneta_denunciata <- monetaFalsa;
+        flush;
+        var int ans;
+        input ans;
+        return ans;
     }
 
     main {
-        LEFT  <- -1;
-        NONE  <-  0;
-        RIGHT <-  1;
 
-        var int N;
         input N;
 
-        alloc posizione_monete : 1..N;
+        var int ans;
 
-        for ( i : 1..N )
-        {
-            posizione_monete[i] <- NONE;
-        }
+        call find_light_coin() -> ans;
 
-        contatore_piatto_sinistro <- 0;
-        contatore_piatto_destro <- 0;
-        numero_pesate <- 0;
-
-        input posizione_moneta_leggera;
-
-        call individua(N) -> moneta_denunciata;
-
-        if ( moneta_denunciata = posizione_moneta_leggera )
-        {
-            output numero_pesate;
-            return numero_pesate;
-        }
-
-        output -1;
-        return -1;
+        output ans;
     }
 }
 
