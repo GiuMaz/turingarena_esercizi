@@ -24,6 +24,8 @@ class light_coin_utils:
         self.coins_position[coin] = position
 
     def _move_coin(self):
+
+        # find the largest set of valid position
         total_left  = 0
         total_right = 0
         total_none  = 0
@@ -36,6 +38,7 @@ class light_coin_utils:
             elif self.coins_position[i] == -1:
                 total_left+=1
 
+        # move the coin in the largest set
         return_value = 0
         if total_left >= total_right:
             if total_left > total_none:
@@ -48,12 +51,14 @@ class light_coin_utils:
             else:
                 return_value = 0
 
+        # update the valid position to be consistent with the new weigh
         new_valid_coin = []
         for i in self.valid_coins:
             if self.coins_position[i] == -return_value:
                 new_valid_coin.append(i)
         self.valid_coins[:] = new_valid_coin
 
+        # if only a single valid position remain it must be the right position
         if len(self.valid_coins) == 1:
             self.light_coin_position = self.valid_coins[0]
 
@@ -80,7 +85,7 @@ class light_coin_utils:
 
 with sandbox.create_process("solution") as s, light_coin(s) as driver:
 
-    driver.N = 2*2*2*2*2*2*2*2*2*2
+    driver.N = 2**5
 
     # moneta in posizione fissa
     lc = light_coin_utils(driver,light_coin_position=3)
@@ -96,10 +101,9 @@ with sandbox.create_process("solution") as s, light_coin(s) as driver:
 
 with sandbox.create_process("solution") as s, light_coin(s) as driver:
 
-    driver.N = 2*2*2*2*2*2*2*2*2*2
+    driver.N = 2**4
 
     # moneta in posizione variabile
-
     lc = light_coin_utils(driver)
 
     S = driver.find_light_coin(callback_place=lc.place, callback_weigh=lc.weigh)
