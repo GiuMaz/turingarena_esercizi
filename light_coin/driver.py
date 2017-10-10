@@ -23,16 +23,30 @@ class light_coin_utils:
             raise ValueError("invalid position")
         self.coins_position[coin] = position
 
-    def move_coin(self):
-        total_right = 0 # total_left = total_right
+    def _move_coin(self):
+        total_left  = 0
+        total_right = 0
         total_none  = 0
+
         for i in self.valid_coins:
             if self.coins_position[i] == 1:
                 total_right+=1
             elif self.coins_position[i] == 0:
                 total_none+=1
+            elif self.coins_position[i] == -1:
+                total_left+=1
 
-        return_value =  0 if total_none > total_right else 1 
+        return_value = 0
+        if total_left >= total_right:
+            if total_left > total_none:
+                return_value = 1
+            else:
+                return_value = 0
+        else:
+            if total_right > total_none:
+                return_value = -1
+            else:
+                return_value = 0
 
         new_valid_coin = []
         for i in self.valid_coins:
@@ -59,7 +73,7 @@ class light_coin_utils:
             if self.light_coin_position is not None:
                 return_value = - self.coins_position[self.light_coin_position]
             else:
-                return_value = self.move_coin()
+                return_value = self._move_coin()
 
         self.coins_position[:] = [0] * driver.N
         return return_value
@@ -69,16 +83,16 @@ with sandbox.create_process("solution") as s, light_coin(s) as driver:
     driver.N = 2*2*2*2*2*2*2*2*2*2
 
     # moneta in posizione fissa
-    lc1 = light_coin_utils(driver,light_coin_position=3)
+    lc = light_coin_utils(driver,light_coin_position=3)
 
-    S = driver.find_light_coin(callback_place=lc1.place, callback_weigh=lc1.weigh)
+    S = driver.find_light_coin(callback_place=lc.place, callback_weigh=lc.weigh)
 
-    if S == lc1.light_coin_position:
+    if S == lc.light_coin_position:
         print ("1: right coin")
     else:
         print ("1: wrong coin")
 
-    print("Answer:", S, "number of weights:",lc1.number_of_weights, file=sys.stderr)
+    print("Answer:", S, "number of weights:",lc.number_of_weights, file=sys.stderr)
 
 with sandbox.create_process("solution") as s, light_coin(s) as driver:
 
@@ -86,14 +100,14 @@ with sandbox.create_process("solution") as s, light_coin(s) as driver:
 
     # moneta in posizione variabile
 
-    lc2 = light_coin_utils(driver)
+    lc = light_coin_utils(driver)
 
-    S = driver.find_light_coin(callback_place=lc2.place, callback_weigh=lc2.weigh)
+    S = driver.find_light_coin(callback_place=lc.place, callback_weigh=lc.weigh)
 
-    if S == lc2.light_coin_position:
+    if S == lc.light_coin_position:
         print ("2: right coin")
     else:
         print ("2: wrong coin")
 
-    print("Answer:", S, "number of weights:",lc2.number_of_weights, file=sys.stderr)
+    print("Answer:", S, "number of weights:",lc.number_of_weights, file=sys.stderr)
 
