@@ -5,7 +5,7 @@ from interfaces.light_coin import light_coin
 from turingarena.runtime.sandbox import sandbox
 from turingarena.runtime.data import rebased
 
-from math import log, ceil
+from math import log, ceil, floor
 
 class light_coin_utils:
 
@@ -134,7 +134,7 @@ for N in [10,100,1000]:
 
 for N in [10,100,1000]:
     (answer_is_correct,number_of_weights) = evaluate_solution(N)
-    task7 = task7 & answer_is_correct & (number_of_weights <= N/2 )
+    task7 = task7 & answer_is_correct & (number_of_weights <= floor(N/2) )
 
 for N in [10,100,1000]:
     (answer_is_correct,number_of_weights) = evaluate_solution(N)

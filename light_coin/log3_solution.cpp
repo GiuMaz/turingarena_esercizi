@@ -1,7 +1,6 @@
 int find_light_coin()
 {
-    int start, middle, end, leftover, initial_n;
-    initial_n = N;
+    int start, middle, end, leftover;
 
     leftover = N % 3;
 
@@ -11,33 +10,33 @@ int find_light_coin()
 
     while (1)
     {
-        if (N == 1) return start; //denuncia(start);
+        if (N == 1) return start;
 
         if (N == 2)
         {
             place(start, -1);
             place(start+1, 1);
 
-            int risp =  weigh();
+            int ans =  weigh();
 
-            if (risp == -1) return start+1; //denuncia(start+1);
-            else return start; //denuncia(start);
+            if (ans == -1) return start+1;
+            else return start;
         }
 
         for (int i = start; i < middle; ++i) place(i, -1);
 
         for (int i = middle; i < end; ++i) place(i, 1);
 
-        int risp =  weigh();
+        int ans =  weigh();
 
-        if (risp == 0)
+        if (ans == 0)
         {
             N = N - (end-start);
             leftover = N%3;
 
             start = end;
         }
-        else if (risp == -1)
+        else if (ans == -1)
         {
             N = end-middle;
             leftover = N%3;
