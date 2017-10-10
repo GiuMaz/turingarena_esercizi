@@ -1,11 +1,12 @@
 int find_light_coin()
 {
+    int ans;
     place(0,-1);
     place(1,1);
 
-    int ans = weigh();
+    ans = weigh();
 
-    if ( weigh == -1)
+    if ( ans == -1)
         return 1;
     else
         return 0;

@@ -5,6 +5,8 @@ from interfaces.light_coin import light_coin
 from turingarena.runtime.sandbox import sandbox
 from turingarena.runtime.data import rebased
 
+from math import log, ceil
+
 class light_coin_utils:
 
     def __init__(self, driver, light_coin_position=None):
@@ -17,7 +19,7 @@ class light_coin_utils:
     def place(self, coin, position):
         if self.coins_position[coin] != 0:
             raise ValueError("already placed")
-        if coin < 0 or coin >= driver.N:
+        if coin < 0 or coin >= self.driver.N:
             raise ValueError("coin out of range")
         if position not in(-1,+1):
             raise ValueError("invalid position")
@@ -80,38 +82,76 @@ class light_coin_utils:
             else:
                 return_value = self._move_coin()
 
-        self.coins_position[:] = [0] * driver.N
+        self.coins_position[:] = [0] * self.driver.N
         return return_value
 
-with sandbox.create_process("solution") as s, light_coin(s) as driver:
+def evaluate_solution(N, light_coin_position=None):
+    with sandbox.create_process("solution") as s, light_coin(s) as driver:
 
-    driver.N = 2**5
+        driver.N = N
+        lc = light_coin_utils(driver,light_coin_position=light_coin_position)
 
-    # moneta in posizione fissa
-    lc = light_coin_utils(driver,light_coin_position=3)
+        S = driver.find_light_coin(callback_place=lc.place, callback_weigh=lc.weigh)
 
-    S = driver.find_light_coin(callback_place=lc.place, callback_weigh=lc.weigh)
+        return (S == lc.light_coin_position, lc.number_of_weights)
 
-    if S == lc.light_coin_position:
-        print ("1: right coin")
-    else:
-        print ("1: wrong coin")
+task0 = True # the false coin is in position 2
+task1 = True # the false coin is either 0 or 1
+task2 = True # N = 7, max weigh = 6
+task3 = True # N = 7, max weigh = 4
+task4 = True # N = 7, max weigh = 3
+task5 = True # N = 8, max weigh = 3
+task6 = True # max weigh = N - 1
+task7 = True # max weigh = N / 2
+task8 = True # max weigh = log2 N
+task9 = True # max weigh = log3 N
 
-    print("Answer:", S, "number of weights:",lc.number_of_weights, file=sys.stderr)
+for N in [3,10,100]:
+    (answer_is_correct,number_of_weights) = evaluate_solution(N,light_coin_position=2)
+    task0 = task0 & answer_is_correct
 
-with sandbox.create_process("solution") as s, light_coin(s) as driver:
+for N in [3,10,100]:
+    (answer_is_correct,number_of_weights) = evaluate_solution(N,light_coin_position=0)
+    task1 = task1 & answer_is_correct
+    (answer_is_correct,number_of_weights) = evaluate_solution(N,light_coin_position=1)
+    task1 = task1 & answer_is_correct
 
-    driver.N = 2**4
+(answer_is_correct,number_of_weights) = evaluate_solution(7)
+task2 = answer_is_correct & (number_of_weights <=6)
 
-    # moneta in posizione variabile
-    lc = light_coin_utils(driver)
+(answer_is_correct,number_of_weights) = evaluate_solution(7)
+task3 = answer_is_correct & (number_of_weights <=4)
 
-    S = driver.find_light_coin(callback_place=lc.place, callback_weigh=lc.weigh)
+(answer_is_correct,number_of_weights) = evaluate_solution(7)
+task4 = answer_is_correct & (number_of_weights <=3)
 
-    if S == lc.light_coin_position:
-        print ("2: right coin")
-    else:
-        print ("2: wrong coin")
+(answer_is_correct,number_of_weights) = evaluate_solution(8)
+task5 = answer_is_correct & (number_of_weights <=3)
 
-    print("Answer:", S, "number of weights:",lc.number_of_weights, file=sys.stderr)
+for N in [10,100,1000]:
+    (answer_is_correct,number_of_weights) = evaluate_solution(N)
+    task6 = task6 & answer_is_correct & (number_of_weights <= N-1 )
+
+for N in [10,100,1000]:
+    (answer_is_correct,number_of_weights) = evaluate_solution(N)
+    task7 = task7 & answer_is_correct & (number_of_weights <= N/2 )
+
+for N in [10,100,1000]:
+    (answer_is_correct,number_of_weights) = evaluate_solution(N)
+    task8 = task8 & answer_is_correct & (number_of_weights <= ceil(log(N,2)) )
+
+for N in [10,100,1000]:
+    (answer_is_correct,number_of_weights) = evaluate_solution(N)
+    task9 = task9 & answer_is_correct & (number_of_weights <= ceil(log(N,3)) )
+
+print("Task0:", task0, file=sys.stderr)
+print("Task1:", task1, file=sys.stderr)
+print("Task2:", task2, file=sys.stderr)
+print("Task3:", task3, file=sys.stderr)
+print("Task4:", task4, file=sys.stderr)
+print("Task5:", task5, file=sys.stderr)
+print("Task6:", task6, file=sys.stderr)
+print("Task7:", task7, file=sys.stderr)
+print("Task8:", task8, file=sys.stderr)
+print("Task9:", task9, file=sys.stderr)
 
