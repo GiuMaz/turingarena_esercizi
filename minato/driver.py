@@ -31,8 +31,8 @@ class minato_utils:
             else: m+=1
             print(*self.mine_field,n,m,'\n',sep='\n')
 
-        for i in range(n,self.N): self.mine_field[i][m] = 0
-        for i in range(m,self.M): self.mine_field[n][M] = 0
+        for i in range(n,self.N): self.mine_field[i][self.M-1] = 0
+        for j in range(m,self.M): self.mine_field[self.N-1][j] = 0
 
     def is_safe(self, row, column):
         if column < 1 or column > self.M:
@@ -62,4 +62,3 @@ evaluate_solution(5,5)
 #        ans = evaluate_solution("input/input{number}.txt".format(number=i))
 #        sol = int(solution_file.read())
 #        print(i, ans == sol )
-

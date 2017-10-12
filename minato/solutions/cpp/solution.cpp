@@ -28,4 +28,3 @@ int find_number_of_paths()
 
     return possible_paths(1,1);
 }
-

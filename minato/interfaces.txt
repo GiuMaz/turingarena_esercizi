@@ -7,17 +7,15 @@ interface minato {
     function find_number_of_paths() -> int;
 
     main {
+        input N, M;
 
-        input N;
-        input M;
-
-        alloc mine_field : 1..N;
-        for(i: 1..N) {
-            alloc mine_field[i] : 1..M;
+        alloc mine_field : N;
+        for(i: N) {
+            alloc mine_field[i] : M;
         }
 
-        for(i: 1..N) {
-            for(j: 1..M) {
+        for(i: N) {
+            for(j: M) {
                 input mine_field[i][j];
             }
         }
@@ -28,4 +26,3 @@ interface minato {
         output ans;
     }
 }
-
