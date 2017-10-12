@@ -10,10 +10,10 @@ int possible_paths(int row, int column)
 
     int tot = 0;
 
-    if ( row < N && is_safe(row +1, column) )
+    if ( row < N && mine_field[row +1][column] )
         tot += possible_paths(row +1, column);
 
-    if ( column < M && is_safe(row, column +1) )
+    if ( column < M && mine_field[row][column+1] )
         tot += possible_paths(row, column +1);
 
     percorsi[row][column] = tot;

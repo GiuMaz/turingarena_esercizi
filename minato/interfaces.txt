@@ -2,25 +2,27 @@ interface minato {
 
     var int N;
     var int M;
+    var int[][] mine_field;
 
     function find_number_of_paths() -> int;
-
-    callback is_safe(int row, int column) -> int
-    {
-        output row, column;
-        flush;
-        var int ans;
-        input ans;
-        return ans;
-    }
 
     main {
 
         input N;
         input M;
 
-        var int ans;
+        alloc mine_field : 1..N;
+        for(i: 1..N) {
+            alloc mine_field[i] : 1..M;
+        }
 
+        for(i: 1..N) {
+            for(j: 1..M) {
+                input mine_field[i][j];
+            }
+        }
+
+        var int ans;
         call find_number_of_paths() -> ans;
 
         output ans;
