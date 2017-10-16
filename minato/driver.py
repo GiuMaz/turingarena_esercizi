@@ -35,7 +35,7 @@ def mine_field_from_file(file_name):
     with open(file_name,"r") as f:
         N,M = [int(x) for x in next(f).split()]
         mine_field = [[ {'*':1,'+':0}[c] for c in line.strip('\n')] for line in f]
-        return N, M, mine_field
+    return N, M, mine_field
 
 def is_solution_correct(N,M,mine_field=None):
 
@@ -46,9 +46,7 @@ def is_solution_correct(N,M,mine_field=None):
 
 # solve the example case
 def task1():
-
     N,M,mine_field = mine_field_from_file("input/example.txt")
-
     return is_solution_correct(N,M,mine_field)
 
 # N <= 20

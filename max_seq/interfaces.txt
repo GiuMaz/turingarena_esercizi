@@ -9,8 +9,8 @@ interface max_seq {
 
         input N;
 
-        alloc A : 1..N;
-        for(i : 1..N) {
+        alloc A : N;
+        for(i : N) {
             input A[i];
         }
 

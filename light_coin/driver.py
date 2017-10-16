@@ -3,7 +3,6 @@ import sys
 from interfaces.light_coin import light_coin
 
 from turingarena.runtime.sandbox import sandbox
-from turingarena.runtime.data import rebased
 
 from math import log, ceil, floor
 
