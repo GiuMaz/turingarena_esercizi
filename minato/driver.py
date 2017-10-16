@@ -6,122 +6,85 @@ from turingarena.runtime.sandbox import sandbox
 
 from random import seed, randint
 
-seed(1001001)
+seed(123321)
 
-class minato_utils:
+def generate_mine_field(N,M):
+    mine_field = [[int(randint(0,99) > 85) for __ in range(M)] for __ in range(N)]
 
-    def __init__(self, N, M, mine_field=None):
-        self.N = N
-        self.M = M
-        if mine_field is None:
-            self._generate_mine_field()
-        else:
-            self.mine_field = mine_field
+    n,m = 0,0
+    while n < N and m < M:
+        mine_field[n][m] = 0
+        if randint(0,1): n+=1
+        else: m+=1
 
-    def _generate_mine_field(self):
-        self.mine_field = []
+    for i in range(n,N): mine_field[i][M-1] = 0
+    for j in range(m,M): mine_field[N-1][j] = 0
 
-        for i in range(0,self.N): self.mine_field.append([1] * self.M)
+    return mine_field
 
-        for i in range(0,self.N):
-            for j in range(0, self.M):
-                if randint(0,99) > 85: self.mine_field[i][j] = 0
+def evaluate_solution(algoritm_name, N, M, mine_field):
+    with sandbox.create_process(algoritm_name) as s, minato(s) as driver:
 
-        n,m = 0,0
+        driver.N = N
+        driver.M = M
+        driver.mine_field = mine_field
 
-        while n < self.N and m < self.M:
-            self.mine_field[n][m] = 0
-            if randint(0,1) == 0: n+=1
-            else: m+=1
+        return driver.find_number_of_paths()
 
-        for i in range(n,self.N): self.mine_field[i][self.M-1] = 0
-        for j in range(m,self.M): self.mine_field[self.N-1][j] = 0
+def mine_field_from_file(file_name):
+    with open(file_name,"r") as f:
+        N,M = [int(x) for x in next(f).split()]
+        mine_field = [[ {'*':1,'+':0}[c] for c in line.strip('\n')] for line in f]
+        return N, M, mine_field
 
+def is_solution_correct(N,M,mine_field=None):
 
-def evaluate_solution(N,M):
-    with sandbox.create_process("solution") as s, minato(s) as driver_solution,\
-            sandbox.create_process("reference") as r, minato(r) as driver_reference:
+    if mine_field is None:
+        mine_field = generate_mine_field(N,M)
 
-        mu = minato_utils(N,M)
-
-        driver_solution.N = N
-        driver_solution.M = M
-        driver_solution.mine_field = mu.mine_field
-        user_ans = driver_solution.find_number_of_paths()
-
-        driver_reference.N = N
-        driver_reference.M = M
-        driver_reference.mine_field = mu.mine_field
-        reference_ans = driver_reference.find_number_of_paths()
-
-        return user_ans == reference_ans
-
-def evaluate_input_solution(input_file):
-    with sandbox.create_process("solution") as s, minato(s) as driver_solution,\
-            sandbox.create_process("reference") as r, minato(r) as driver_reference, \
-            open(input_file,"r") as f:
-
-        (N,M) = [int(x) for x in next(f).split()]
-        mine_map = []
-        for line in f:
-            mine_line = []
-            for c in line:
-                if c is '*': mine_line.append(0) 
-                if c is '+': mine_line.append(1) 
-            mine_map.append(mine_line)
-
-        mu = minato_utils(N,M,mine_map)
-
-        driver_solution.N = N
-        driver_solution.M = M
-        driver_solution.mine_field = mu.mine_field
-        user_ans = driver_solution.find_number_of_paths()
-
-        driver_reference.N = N
-        driver_reference.M = M
-        driver_reference.mine_field = mu.mine_field
-        reference_ans = driver_reference.find_number_of_paths()
-
-        return user_ans == reference_ans
+    return evaluate_solution("solution",N,M,mine_field) == evaluate_solution("reference",N,M,mine_field)
 
 # solve the example case
 def task1():
-    return evaluate_input_solution("input/input0.txt")
+
+    N,M,mine_field = mine_field_from_file("input/example.txt")
+
+    return is_solution_correct(N,M,mine_field)
 
 # N <= 20
 def task2():
     task_result = True
-    task_result &= evaluate_solution(5,5)
-    task_result &= evaluate_solution(10,5)
-    task_result &= evaluate_solution(10,10)
-    task_result &= evaluate_solution(15,15)
-    task_result &= evaluate_solution(20,20)
+    task_result &= is_solution_correct(5,5)
+    task_result &= is_solution_correct(10,5)
+    task_result &= is_solution_correct(10,10)
+    task_result &= is_solution_correct(15,15)
+    task_result &= is_solution_correct(20,20)
 
     return task_result
 
 # N <= 50
 def task3():
     task_result = True
-    task_result &= evaluate_solution(20,30)
-    task_result &= evaluate_solution(30,30)
-    task_result &= evaluate_solution(40,30)
-    task_result &= evaluate_solution(40,40)
-    task_result &= evaluate_solution(50,40)
-    task_result &= evaluate_solution(50,50)
+    task_result &= is_solution_correct(20,30)
+    task_result &= is_solution_correct(30,30)
+    task_result &= is_solution_correct(40,30)
+    task_result &= is_solution_correct(40,40)
+    task_result &= is_solution_correct(50,40)
+    task_result &= is_solution_correct(50,50)
 
     return task_result
 
 # N <= 100
 def task4():
     task_result = True
-    task_result &= evaluate_solution(60,60)
-    task_result &= evaluate_solution(70,70)
-    task_result &= evaluate_solution(75,75)
-    task_result &= evaluate_solution(80,50)
-    task_result &= evaluate_solution(80,80)
-    task_result &= evaluate_solution(90,90)
-    task_result &= evaluate_solution(100,100)
-    task_result &= evaluate_solution(100,1)
+    task_result &= is_solution_correct(60,60)
+    task_result &= is_solution_correct(70,70)
+    task_result &= is_solution_correct(75,75)
+    task_result &= is_solution_correct(80,50)
+    task_result &= is_solution_correct(80,80)
+    task_result &= is_solution_correct(90,90)
+    task_result &= is_solution_correct(100,100)
+    task_result &= is_solution_correct(100,1)
 
     return task_result
 
