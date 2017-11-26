@@ -1,16 +1,14 @@
-interface light_coin {
+interface light_coin_interfaces {
 
     var int N;
 
     function find_light_coin() -> int;
 
-    callback place(int coin, int position)
-    {
+    callback place(int coin, int position) {
         output coin, position;
     }
 
-    callback weigh() -> int
-    {
+    callback weigh() -> int {
         flush;
         var int ans;
         input ans;
@@ -18,13 +16,9 @@ interface light_coin {
     }
 
     main {
-
         input N;
-
         var int ans;
-
         call find_light_coin() -> ans;
-
         output ans;
     }
 }
