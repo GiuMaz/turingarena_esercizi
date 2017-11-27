@@ -1,3 +1,5 @@
 algorithms/
 generated/
 old_cms/
+*.egg-info*
+__pycache__
