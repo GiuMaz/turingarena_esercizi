@@ -1,4 +1,4 @@
-interface light_coin_interfaces {
+interface light_coin_interface {
 
     var int N;
 

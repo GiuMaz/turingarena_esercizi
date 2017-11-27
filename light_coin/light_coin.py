@@ -91,7 +91,7 @@ class light_coin_utils:
 def evaluate_solution(entry, N, light_coin_position=None):
     with entry.run(N=N) as p:
         lc = light_coin_utils(driver,light_coin_position=light_coin_position)
-        S = p.find_light_coin(weigh=lc.weigh,place=lc.place)
+        S = p.find_light_coin(N=N,weigh=lc.weigh,place=lc.place)
         return (S == lc.light_coin_position, lc.number_of_weights)
 
 @problem.goal
