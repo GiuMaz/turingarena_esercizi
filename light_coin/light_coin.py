@@ -4,25 +4,24 @@ from math import log, ceil, floor
 problem = Problem()
 
 problem.implementation_entry(
-    "log3_solution",
+    "entry",
     protocol_name="light_coin",
     interface_name="light_coin_interface",
 )
 
-
 class light_coin_utils:
 
-    def __init__(self, driver, light_coin_position=None):
+    def __init__(self, N, light_coin_position=None):
         self.number_of_weights = 0
-        self.driver = driver
-        self.coins_position = [0] * driver.N
-        self.valid_coins = list(range(0,driver.N))
+        self.N = N
+        self.coins_position = [0] * N
+        self.valid_coins = list(range(0,N))
         self.light_coin_position = light_coin_position
 
     def place(self, coin, position):
         if self.coins_position[coin] != 0:
             raise ValueError("already placed")
-        if coin < 0 or coin >= self.driver.N:
+        if coin < 0 or coin >= self.N:
             raise ValueError("coin out of range")
         if position not in(-1,+1):
             raise ValueError("invalid position")
@@ -85,21 +84,17 @@ class light_coin_utils:
             else:
                 return_value = self._move_coin()
 
-        self.coins_position[:] = [0] * self.driver.N
+        self.coins_position[:] = [0] * self.N
         return return_value
-
-def evaluate_solution(entry, N, light_coin_position=None):
-    with entry.run(N=N) as p:
-        lc = light_coin_utils(driver,light_coin_position=light_coin_position)
-        S = p.find_light_coin(N=N,weigh=lc.weigh,place=lc.place)
-        return (S == lc.light_coin_position, lc.number_of_weights)
 
 @problem.goal
 def task0(entry): # the false coin is in position 2
     result = True
     for N in [3,10,100]:
-        (answer_is_correct,number_of_weights) = evaluate_solution(entry,N,light_coin_position=2)
-        result = result & answer_is_correct
+        with entry.run(N=N) as p:
+            lc = light_coin_utils(N,light_coin_position=2)
+            S = p.find_light_coin(weigh=lc.weigh,place=lc.place)
+            result = result and (S == lc.light_coin_position)
     #log("Task0:", result)
     return result
 
