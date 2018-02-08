@@ -9,6 +9,12 @@ problem.implementation_entry(
     interface_name="light_coin_interface",
 )
 
+def weigh():
+    return 0
+
+def place(c,p):
+    return
+
 class light_coin_utils:
 
     def __init__(self, N, light_coin_position=None):
@@ -87,89 +93,80 @@ class light_coin_utils:
         self.coins_position[:] = [0] * self.N
         return return_value
 
+
+def evaluate_solution(entry, N, light_coin_position=None):
+    with entry.run(N=N) as p:
+        lc = light_coin_utils(N,light_coin_position=light_coin_position)
+        S = p.find_light_coin(weigh=lc.weigh,place=lc.place)
+        return (S == lc.light_coin_position, lc.number_of_weights)
+
 @problem.goal
 def task0(entry): # the false coin is in position 2
     result = True
     for N in [3,10,100]:
-        with entry.run(N=N) as p:
-            lc = light_coin_utils(N,light_coin_position=2)
-            S = p.find_light_coin(weigh=lc.weigh,place=lc.place)
-            result = result and (S == lc.light_coin_position)
-    #log("Task0:", result)
+        (answer_is_correct,number_of_weights) = evaluate_solution(entry,N,light_coin_position=2)
+        result = result and answer_is_correct
     return result
 
-#@problem.goal
-#def task1(): # the false coin is either 0 or 1
-#    result = True
-#    for N in [3,10,100]:
-#        (answer_is_correct,number_of_weights) = evaluate_solution(N,light_coin_position=0)
-#        result = result & answer_is_correct
-#        (answer_is_correct,number_of_weights) = evaluate_solution(N,light_coin_position=1)
-#        result = result & answer_is_correct
-#    #log("Task1:", result)
-#    return result
-#
-#@problem.goal
-#def task2(): = True # N = 7, max weigh = 6
-#    (answer_is_correct,number_of_weights) = evaluate_solution(7)
-#    result = answer_is_correct & (number_of_weights <=6)
-#    #log("Task2:", result)
-#    return result
-#
-#@problem.goal
-#def task3(): # N = 7, max weigh = 4
-#    (answer_is_correct,number_of_weights) = evaluate_solution(7)
-#    result = answer_is_correct & (number_of_weights <=4)
-#    #log("Task3:", result)
-#    return result
-#
-#@problem.goal
-#def task4(): # N = 7, max weigh = 3
-#    (answer_is_correct,number_of_weights) = evaluate_solution(7)
-#    result = answer_is_correct & (number_of_weights <=3)
-#    #log("Task4:", result)
-#    return result
-#
-#@problem.goal
-#def task5(): # N = 8, max weigh = 3
-#    (answer_is_correct,number_of_weights) = evaluate_solution(8)
-#    result = answer_is_correct & (number_of_weights <=3)
-#    #log("Task5:", result)
-#    return result
-#
-#@problem.goal
-#def task6(): # max weigh = N - 1
-#    result result = True
-#    for N in [10,100,1000]:
-#        (answer_is_correct,number_of_weights) = evaluate_solution(N)
-#        result = result & answer_is_correct & (number_of_weights <= N-1 )
-#    #log("Task6:", result)
-#    return result
-#
-#@problem.goal
-#def task7(): # max weigh = N / 2
-#    result result = True
-#    for N in [10,100,1000]:
-#        (answer_is_correct,number_of_weights) = evaluate_solution(N)
-#        result = result & answer_is_correct & (number_of_weights <= floor(N/2) )
-#    #log("Task7:", result)
-#    return result
-#
-#@problem.goal
-#def task8(): # max weigh = log2 N
-#    result result = True
-#    for N in [10,100,1000]:
-#        (answer_is_correct,number_of_weights) = evaluate_solution(N)
-#        result = result & answer_is_correct & (number_of_weights <= ceil(log(N,2)) )
-#    #log("Task8:", result)
-#    return result
-#
-#@problem.goal
-#def task9(): # max weigh = log3 N
-#    result result = True
-#    for N in [10,100,1000]:
-#        (answer_is_correct,number_of_weights) = evaluate_solution(N)
-#        result = result & answer_is_correct & (number_of_weights <= ceil(log(N,3)) )
-#    #log("Task9:", result)
-#    return result
-#
+@problem.goal
+def task1(entry): # the false coin is either 0 or 1
+    result = True
+    for N in [3,10,100]:
+        (answer_is_correct,number_of_weights) = evaluate_solution(entry,N,light_coin_position=0)
+        result = result and answer_is_correct
+        (answer_is_correct,number_of_weights) = evaluate_solution(entry,N,light_coin_position=1)
+        result = result and answer_is_correct
+    return result
+
+@problem.goal
+def task2(entry): # N = 7, max wigh = 6
+    (answer_is_correct,number_of_weights) = evaluate_solution(entry,7)
+    return  answer_is_correct and (number_of_weights <=6)
+
+@problem.goal
+def task3(entry): # N = 7, max weigh = 4
+    (answer_is_correct,number_of_weights) = evaluate_solution(entry,7)
+    return answer_is_correct and (number_of_weights <=4)
+
+@problem.goal
+def task4(entry): # N = 7, max weigh = 3
+    (answer_is_correct,number_of_weights) = evaluate_solution(entry,7)
+    return answer_is_correct and (number_of_weights <=3)
+
+@problem.goal
+def task5(entry): # N = 8, max weigh = 3
+    (answer_is_correct,number_of_weights) = evaluate_solution(entry,8)
+    return answer_is_correct and (number_of_weights <=3)
+
+@problem.goal
+def task6(entry): # max weigh = N - 1
+    result = True
+    for N in [10,100,1000]:
+        (answer_is_correct,number_of_weights) = evaluate_solution(entry,N)
+        result = result and answer_is_correct and (number_of_weights <= N-1 )
+    return result
+
+@problem.goal
+def task7(entry): # max weigh = N / 2
+    result = True
+    for N in [10,100,1000]:
+        (answer_is_correct,number_of_weights) = evaluate_solution(entry,N)
+        result = result and answer_is_correct and (number_of_weights <= floor(N/2) )
+    return result
+
+@problem.goal
+def task8(entry): # max weigh = log2 N
+    result = True
+    for N in [10,100,1000]:
+        (answer_is_correct,number_of_weights) = evaluate_solution(entry,N)
+        result = result and answer_is_correct and (number_of_weights <= ceil(log(N,2)) )
+    return result
+
+@problem.goal
+def task9(entry): # max weigh = log3 N
+    result = True
+    for N in [10,100,1000]:
+        (answer_is_correct,number_of_weights) = evaluate_solution(entry,N)
+        result = result and answer_is_correct and (number_of_weights <= ceil(log(N,3)) )
+    return result
+
