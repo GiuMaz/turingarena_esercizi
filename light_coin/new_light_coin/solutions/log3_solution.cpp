@@ -1,10 +1,4 @@
-int N;
-
-void place(int coin, int position);
-
-int weigh();
-
-int find_light_coin()
+int find_light_coin(int N, int weigh(), void place(int coin, int position))
 {
     int start, middle, end, leftover;
 

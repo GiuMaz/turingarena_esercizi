@@ -1,0 +1,24 @@
+function find_light_coin(N) callbacks {
+    function  weigh();
+    procedure place(coin,position);
+}
+
+main {
+    read N;
+
+    call ans = find_light_coin(N) callbacks {
+
+        function weigh() {
+            read ans;
+            return ans;
+        }
+
+        procedure place(coin, position) {
+            write coin, position;
+        }
+
+    }
+
+    write ans;
+}
+

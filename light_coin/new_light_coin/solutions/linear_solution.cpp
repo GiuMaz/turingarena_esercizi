@@ -1,4 +1,4 @@
-int find_light_coin()
+int find_light_coin(int N, int weigh(), void place(int coin, int position))
 {
     int ans;
     place(0,-1);
