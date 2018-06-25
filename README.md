@@ -1,9 +1,4 @@
 # turingarena_esercizi
 
-turingarenagen
-
-turingarenac -I <interface_name> -o solution solution.cpp
-
-PYTHONPATH=generated/runtime/python turingarenasandbox python driver.py
-
-
+Alcuni problemi scritti per prendere familiarità con turingarena
+https://github.com/turingarena/turingarena
